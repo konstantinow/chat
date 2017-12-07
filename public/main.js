@@ -59,10 +59,10 @@ $(function() {
     // if there is a non-empty message and a socket connection
     if (message && connected) {
       $inputMessage.val('');
-      addChatMessage({
-        username: username,
-        message: message
-      });
+      //addChatMessage({
+        //username: username,
+        //message: message
+      //});
       // tell server to execute 'new message' and send along one parameter
       socket.emit('new message', {username: username, message: message});
     }
@@ -85,14 +85,14 @@ $(function() {
     }
 
     var $usernameDiv = $('<span class="username"/>')
-      .text(data.username)
+      .text(data.message.username)
       .css('color', getUsernameColor(data.username));
     var $messageBodyDiv = $('<span class="messageBody">')
-      .text(data.message);
+      .text(data.message.message);
 
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
-      .data('username', data.username)
+      .data('username', data.message.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
 
@@ -238,7 +238,8 @@ $(function() {
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
-    addChatMessage(data);
+      console.log(JSON.stringify(data))
+      addChatMessage(data);
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
